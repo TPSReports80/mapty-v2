@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { GlobalStyles } from "./GlobalStyles";
 
+import Sidebar from "./components/Sidebar";
+import Map from "./components/Map";
+import { reducer } from "./reducer";
 function App() {
+  const defaultState = {
+    showForm: false,
+    currentWorkout: null,
+    workouts: [],
+    latlng: null,
+  };
+
+  const [state, dispatch] = React.useReducer(reducer, defaultState);
+  const getPosition = function () {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  };
+
+  const displayMap = async function () {
+    try {
+      console.log("inside displayMap");
+      const pos = await getPosition();
+      const { latitude: lat, longitude: lng } = pos.coords;
+      dispatch({ type: "DISPLAY_MAP", payload: { lat, lng } });
+    } catch (err) {
+      console.error(err.message);
+      alert("Unable to get your location at this time.");
+    }
+  };
+
+  React.useEffect(() => {
+    console.log("inside useEffect");
+    displayMap();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <GlobalStyles />
+      <Sidebar dispatch={dispatch} state={state} />
+      <Map state={state} dispatch={dispatch} />
     </div>
   );
 }
