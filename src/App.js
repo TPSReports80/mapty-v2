@@ -21,7 +21,6 @@ function App() {
 
   const displayMap = async function () {
     try {
-      console.log("inside displayMap");
       const pos = await getPosition();
       const { latitude: lat, longitude: lng } = pos.coords;
       dispatch({ type: "DISPLAY_MAP", payload: { lat, lng } });
@@ -32,7 +31,6 @@ function App() {
   };
 
   React.useEffect(() => {
-    console.log("inside useEffect");
     displayMap();
   }, []);
 

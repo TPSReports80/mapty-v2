@@ -13,7 +13,6 @@ export const reducer = (state, action) => {
     };
   }
   if (action.type === "SUBMIT_FORM") {
-    console.log(action.payload);
     return {
       ...state,
       showForm: false,
@@ -24,7 +23,6 @@ export const reducer = (state, action) => {
     };
   }
   if (action.type === "MOVE_MAP") {
-    console.log(action.payload);
     return {
       ...state,
       latlng: action.payload,
